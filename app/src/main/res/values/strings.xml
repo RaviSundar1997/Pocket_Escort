@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Ullala_Driver</string>
     <string name="title_activity_driver_display">Map</string>
-    <string name="google_place_api">AIzaSyABCP3ATsTkGV1h4JLhMGOWGKySf41JBMU</string>
-    <string name="number_empty" >empty</string>
+    <string name="google_place_api">AIzaSyAjmM5aNkg_y-JNHjr9UIAfw-Y6a_mKo5M</string>
+    <string name="number_empty">empty</string>
 </resources>

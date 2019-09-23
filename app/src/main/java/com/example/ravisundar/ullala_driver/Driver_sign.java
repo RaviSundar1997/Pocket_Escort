@@ -1,8 +1,8 @@
 package com.example.ravisundar.ullala_driver;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,10 +32,10 @@ public class Driver_sign extends AppCompatActivity {
         vehiclenumber=findViewById(R.id.vehiclenumber);
        // vehicletype=findViewById(R.id.type);
         signup=findViewById(R.id.signup);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
         final Double latitude1 = 0.0, longitude1 = 0.0;
 
-        String sexarray[]={"bike","auto","cars3","cars5"};
+        String[] sexarray = {"bike", "auto", "cars3", "cars5"};
 
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line,sexarray);
         spinner.setAdapter(adapter);

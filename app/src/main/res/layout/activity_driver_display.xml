@@ -6,7 +6,6 @@
     android:orientation="vertical"
     >
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,13 +32,39 @@
             android:layout_weight="1"
             android:onClick="onSearch"
             android:text="Search"
-            android:textSize="12sp"
-           />
+            android:textSize="12sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/destinationplace"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:ems="10"
+
+            android:hint="your place"
+            android:inputType="textPersonName"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp" />
+
+        <Button
+            android:id="@+id/search1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onSearch"
+            android:text="Search"
+            android:textSize="14sp" />
+    </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -51,14 +76,39 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/viewCustomers"
+            android:id="@+id/route"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="Get Route"
+            android:textAlignment="center"
+            android:textSize="14sp" />
 
-            android:text="View customers"
+        <Button
+            android:id="@+id/place_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Place"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/trackMe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Track Me"
+            android:textAlignment="center"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/panic_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="panic button"
             android:textSize="14sp"
-
             android:textAlignment="center"/>
     </LinearLayout>
 
