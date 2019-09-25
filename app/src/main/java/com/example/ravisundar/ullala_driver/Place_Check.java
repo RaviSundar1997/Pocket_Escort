@@ -38,6 +38,8 @@ public class Place_Check extends AppCompatActivity {
     HashMap<String, String> googlePlace;
     int numberofplaces = 0;
     private GoogleMap mMap;
+    String[] arr = new String[2];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,15 @@ public class Place_Check extends AppCompatActivity {
         Hospital = findViewById(R.id.hospital);
         score = findViewById(R.id.paddress);
         haddress = findViewById(R.id.hadress);
+        arr[0] = "hospital";
+        arr[1] = "police";
 
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Hospital.setText(" ");
-                haddress.setText(" ");
+//                Hospital.setText(" ");
+//                haddress.setText(" ");
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     startActivityForResult(builder.build(Place_Check.this), PLACE_PICKER_REQUEST);
@@ -77,21 +81,26 @@ public class Place_Check extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(Place_Check.this, data);
-
                 String toastMsg = String.format("%s", place.getName());
                 yourplace.setText(toastMsg);
-
-                String placetype = "hospital";
                 latitude1 = place.getLatLng().latitude;
                 longitude1 = place.getLatLng().longitude;
                 Toast.makeText(this, latitude1 + " " + longitude1, Toast.LENGTH_LONG).show();
                 //Toast.makeText(getApplicationContext(), (int) (latitude1+longitude1), Toast.LENGTH_SHORT).show();
-                String url = getURL(latitude1, longitude1, placetype);
+                String url = getURL(latitude1, longitude1, arr[0]);
                 Object[] dataTrasfer = new Object[2];
                 dataTrasfer[0] = mMap;
                 dataTrasfer[1] = url;
                 MyAsycTaskToGetPlace myAsycTaskToGetPlace = new MyAsycTaskToGetPlace();
                 myAsycTaskToGetPlace.execute(dataTrasfer);
+//                if(myAsycTaskToGetPlace.getStatus()==AsyncTask.Status.FINISHED){
+//                    Toast.makeText(getApplicationContext(), "Toast works", Toast.LENGTH_SHORT).show();
+//                    String url1 = getURL(latitude1, longitude1, arr[1]);
+//                    Object[] dataTrasfer1 = new Object[2];
+//                    dataTrasfer[0] = mMap;
+//                    dataTrasfer[1] = url1;
+//                    myAsycTaskToGetPlace.execute(dataTrasfer);
+//                }
 
 
             }
@@ -158,6 +167,8 @@ public class Place_Check extends AppCompatActivity {
             showNearbyPlaces(nearbyplaceList);
             Hospital.setText(placeName);
             haddress.setText(vicinity);
+            Toast.makeText(getApplicationContext(), placeName, Toast.LENGTH_SHORT).show();
+
 
 
         }
