@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -44,7 +45,9 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.EncodedPolyline;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Driver_display extends FragmentActivity implements OnMapReadyCallback, RoutingListener {
@@ -250,8 +253,14 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
         place_checck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), Checker.class);
-                startActivity(i);
+
+                String police = "hospital";
+                String url = getURL(latitude1, latitude2, police);
+                Object[] dataTrasfer = new Object[2];
+                dataTrasfer[0] = mMap;
+                dataTrasfer[1] = url;
+                Driver_display.MyAsycTaskToGetPlace myAsycTaskToGetPlace = new Driver_display.MyAsycTaskToGetPlace();
+                myAsycTaskToGetPlace.execute(dataTrasfer);
 
             }
         });
@@ -281,7 +290,6 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
         return googlePlaceUrl.toString();
 
     }
-
 
 
     @Override
@@ -323,6 +331,7 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
 
 
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -383,5 +392,65 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onRoutingCancelled() {
 
+    }
+
+    public class MyAsycTaskToGetPlace extends AsyncTask<Object, String, String> {
+        GoogleMap mMap;
+        String url;
+        private
+
+        String googlePlaceData;
+
+        @Override
+        protected String doInBackground(Object... objects) {
+
+            mMap = (GoogleMap) objects[0];
+            url = (String) objects[1];
+            DownloadUrl downloadUrl = new DownloadUrl();
+            try {
+                googlePlaceData = downloadUrl.readUrl(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return googlePlaceData;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            List<HashMap<String, String>> nearbyplaceList = null;
+            DataParser parser = new DataParser();
+            nearbyplaceList = parser.parse(s);
+            showNearbyPlaces(nearbyplaceList);
+
+
+        }
+
+        private List<HashMap<String, String>> showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList) {
+            if (nearbyPlaceList.size() >= 1) {
+                for (int i = 0; i < nearbyPlaceList.size(); i++) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
+
+                    String placeName = googlePlace.get("place_name");
+                    String vicinity = googlePlace.get("vicinity");
+                    double lat = Double.parseDouble(googlePlace.get("lat"));
+                    double lng = Double.parseDouble(googlePlace.get("lng"));
+
+                    LatLng latlng = new LatLng(lat, lng);
+                    //markerOptions.position(latlng);
+                    //markerOptions.title(placeName+"  "+vicinity);
+                    mMap.addMarker(new MarkerOptions().position(latlng).title(placeName));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+
+
+                }
+                Toast.makeText(getApplicationContext(), "This place is Secure", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "NotSecure", Toast.LENGTH_LONG).show();
+            }
+
+            return nearbyPlaceList;
+        }
     }
 }

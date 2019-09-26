@@ -54,17 +54,19 @@ public class Checker extends AppCompatActivity {
         search = findViewById(R.id.search);
 
         Hospital = findViewById(R.id.hospital);
-        score = findViewById(R.id.paddress);
+        score = findViewById(R.id.score);
         haddress = findViewById(R.id.hadress);
         police = findViewById(R.id.Police);
-        paddress = findViewById(R.id.paddress);
+        paddress = findViewById(R.id.padress);
 
 
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Hospital.setText(" ");
-//                haddress.setText(" ");
+                Hospital.setText(" ");
+                haddress.setText(" ");
+                police.setText(" ");
+                paddress.setText(" ");
                 arr[0] = "hospital";
                 arr[1] = "police";
                 i = 0;
@@ -111,33 +113,50 @@ public class Checker extends AppCompatActivity {
     private List<HashMap<String, String>> showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList) {
         numberofplaces = nearbyPlaceList.size();
 
-        for (int i = 0; i < nearbyPlaceList.size(); i++) {
-            googlePlace = nearbyPlaceList.get(i);
+        for (int j = 0; j < nearbyPlaceList.size(); j++) {
+            googlePlace = nearbyPlaceList.get(j);
             String vicinity, placeName;
             placeName = googlePlace.get("place_name");
             vicinity = googlePlace.get("vicinity");
-            if (i == 0) {
-                count += 1;
-                Hospital.setText(placeName);
-                haddress.setText(vicinity);
+            if (!placeName.isEmpty()) {
+                if (i == 0) {
+                    count += 1;
+                    Hospital.setText(placeName);
+                    haddress.setText(vicinity);
+                    i += 1;
+                } else {
 
-            } else {
-
-                police.setText(placeName);
-                paddress.setText(vicinity);
-                count += 1;
+                    police.setText(placeName);
+                    paddress.setText(vicinity);
+                    count += 1;
+                }
+                lat = Double.parseDouble(googlePlace.get("lat"));
+                lng = Double.parseDouble(googlePlace.get("lng"));
+                break;
             }
-            lat = Double.parseDouble(googlePlace.get("lat"));
-            lng = Double.parseDouble(googlePlace.get("lng"));
-            break;
         }
 
         return nearbyPlaceList;
     }
 
+
     private String getURL(Double latitude1, Double latitude2, String nearbyplace) {
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latitude1 + "," + longitude1 + "&radius=1500&type=" + nearbyplace + "&key=AIzaSyC_fM5v5r7Y-NIIyGM2UL6xMuOR_TlJyuQ");
         return googlePlaceUrl.toString();
+
+    }
+
+    private String toDownloadUrl(String ur) {
+        url = ur;
+        DownloadUrl downloadUrl = new DownloadUrl();
+        try {
+            googlePlaceData = downloadUrl.readUrl(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return googlePlaceData;
 
     }
 
@@ -158,11 +177,12 @@ public class Checker extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+
             List<HashMap<String, String>> nearbyplaceList = null;
             DataParser parser = new DataParser();
             nearbyplaceList = parser.parse(s);
             showNearbyPlaces(nearbyplaceList);
-            i += 1;
+
             if (i == 1) {
                 String url = getURL(latitude1, longitude1, arr[1]);
                 Object[] dataTrasfer = new Object[2];
@@ -171,7 +191,9 @@ public class Checker extends AppCompatActivity {
                 Checker.MyAsycTaskToGetPlace myAsycTaskToGetPlace = new Checker.MyAsycTaskToGetPlace();
                 myAsycTaskToGetPlace.execute(dataTrasfer);
 
+
             }
+
             if (count == 0)
                 score.setText("POOR");
             else if (count == 1)
@@ -183,5 +205,6 @@ public class Checker extends AppCompatActivity {
         }
 
     }
+
 
 }
