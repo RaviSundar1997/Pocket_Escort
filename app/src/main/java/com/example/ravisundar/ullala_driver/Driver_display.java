@@ -1,13 +1,14 @@
 package com.example.ravisundar.ullala_driver;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -30,20 +31,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.maps.DirectionsApi;
-import com.google.maps.DirectionsApiRequest;
-import com.google.maps.GeoApiContext;
-import com.google.maps.model.DirectionsLeg;
-import com.google.maps.model.DirectionsResult;
-import com.google.maps.model.DirectionsRoute;
-import com.google.maps.model.DirectionsStep;
-import com.google.maps.model.EncodedPolyline;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,7 +52,7 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
     EditText yourplace, destinationplace;
     Button search, search1, place_checck, routes, trackMe, panic_button;
     int PLACE_PICKER_REQUEST = 1;
-    int a = 0;
+    int a = 0, count = 0;
     Double latitude1 = 0.0, longitude1 = 0.0, latitude2 = 0.0, longitude2 = 0.0;
     String number, toastMsg1, toastMsg2;
     float[] results = new float[10];
@@ -99,70 +93,6 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
         routes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //       getRouteToMarker();
-                LatLng orgin = new LatLng(latitude1, longitude1);
-                LatLng destination = new LatLng(longitude1, longitude2);
-
-
-                //Define list to get all latlng for the route
-                List<LatLng> path = new ArrayList();
-
-
-                //Execute Directions API request
-                GeoApiContext context = new GeoApiContext.Builder()
-                        .apiKey("AIzaSyC_fM5v5r7Y-NIIyGM2UL6xMuOR_TlJyuQ")
-                        .build();
-                DirectionsApiRequest req = DirectionsApi.getDirections(context, orgin.toString(), destination.toString());
-                try {
-                    DirectionsResult res = req.await();
-                    //Loop through legs and steps to get encoded polylines of each step
-                    if (res.routes != null && res.routes.length > 0) {
-                        DirectionsRoute route = res.routes[0];
-                        Toast.makeText(getApplicationContext(), "routes" + res.routes.length, Toast.LENGTH_LONG).show();
-                        if (route.legs != null) {
-                            for (int i = 0; i < route.legs.length; i++) {
-                                DirectionsLeg leg = route.legs[i];
-                                if (leg.steps != null) {
-                                    for (int j = 0; j < leg.steps.length; j++) {
-                                        DirectionsStep step = leg.steps[j];
-                                        if (step.steps != null && step.steps.length > 0) {
-                                            for (int k = 0; k < step.steps.length; k++) {
-                                                DirectionsStep step1 = step.steps[k];
-                                                EncodedPolyline points1 = step1.polyline;
-                                                if (points1 != null) {
-                                                    //Decode polyline and add points to list of route coordinates
-                                                    List<com.google.maps.model.LatLng> coords1 = points1.decodePath();
-                                                    for (com.google.maps.model.LatLng coord1 : coords1) {
-                                                        path.add(new LatLng(coord1.lat, coord1.lng));
-                                                    }
-                                                }
-                                            }
-                                        } else {
-                                            EncodedPolyline points = step.polyline;
-                                            if (points != null) {
-                                                //Decode polyline and add points to list of route coordinates
-                                                List<com.google.maps.model.LatLng> coords = points.decodePath();
-                                                for (com.google.maps.model.LatLng coord : coords) {
-                                                    path.add(new LatLng(coord.lat, coord.lng));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
-                }
-
-                //Draw the polyline
-                if (path.size() > 0) {
-                    PolylineOptions opts = new PolylineOptions().addAll(path).color(Color.BLUE).width(5);
-                    mMap.addPolyline(opts);
-                }
-
-                mMap.getUiSettings().setZoomControlsEnabled(true);
 
             }
 
@@ -253,14 +183,22 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
         place_checck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String police = "hospital";
-                String url = getURL(latitude1, latitude2, police);
+                count = 0;
+                String hospital = "hospital";
+                String url = getURL(latitude1, latitude2, hospital);
                 Object[] dataTrasfer = new Object[2];
                 dataTrasfer[0] = mMap;
                 dataTrasfer[1] = url;
-                Driver_display.MyAsycTaskToGetPlace myAsycTaskToGetPlace = new Driver_display.MyAsycTaskToGetPlace();
-                myAsycTaskToGetPlace.execute(dataTrasfer);
+                Driver_display.MyAsycTaskToGetPlace myAsycTaskToGetPlace1 = new Driver_display.MyAsycTaskToGetPlace();
+                myAsycTaskToGetPlace1.execute(dataTrasfer);
+
+                String police = "police";
+                String url1 = getURL(latitude1, latitude2, police);
+                Object[] dataTrasfer1 = new Object[2];
+                dataTrasfer1[0] = mMap;
+                dataTrasfer1[1] = url1;
+                Driver_display.myAsycTaskToGetPlace myAsycTaskToGetPlace2 = new Driver_display.myAsycTaskToGetPlace();
+                myAsycTaskToGetPlace2.execute(dataTrasfer1);
 
             }
         });
@@ -273,6 +211,7 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
         return urlhere.toString();
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void getRouteToMarker() {
         LatLng start = new LatLng(latitude1, longitude1);
         LatLng end = new LatLng(latitude2, longitude2);
@@ -442,10 +381,77 @@ public class Driver_display extends FragmentActivity implements OnMapReadyCallba
                     mMap.addMarker(new MarkerOptions().position(latlng).title(placeName));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    count++;
 
 
                 }
-                Toast.makeText(getApplicationContext(), "This place is Secure", Toast.LENGTH_LONG).show();
+
+            }
+
+            return nearbyPlaceList;
+        }
+    }
+
+
+    public class myAsycTaskToGetPlace extends AsyncTask<Object, String, String> {
+        GoogleMap mMap;
+        String url;
+        private
+
+        String googlePlaceData;
+
+        @Override
+        protected String doInBackground(Object... objects) {
+
+            mMap = (GoogleMap) objects[0];
+            url = (String) objects[1];
+            DownloadUrl downloadUrl = new DownloadUrl();
+            try {
+                googlePlaceData = downloadUrl.readUrl(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return googlePlaceData;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            List<HashMap<String, String>> nearbyplaceList = null;
+            DataParser parser = new DataParser();
+            nearbyplaceList = parser.parse(s);
+            showNearbyPlaces(nearbyplaceList);
+
+
+        }
+
+        private List<HashMap<String, String>> showNearbyPlaces(List<HashMap<String, String>> nearbyPlaceList) {
+            if (nearbyPlaceList.size() >= 1) {
+                for (int i = 0; i < nearbyPlaceList.size(); i++) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    HashMap<String, String> googlePlace = nearbyPlaceList.get(i);
+
+                    String placeName = googlePlace.get("place_name");
+                    String vicinity = googlePlace.get("vicinity");
+                    double lat = Double.parseDouble(googlePlace.get("lat"));
+                    double lng = Double.parseDouble(googlePlace.get("lng"));
+
+                    LatLng latlng = new LatLng(lat, lng);
+                    //markerOptions.position(latlng);
+                    //markerOptions.title(placeName+"  "+vicinity);
+                    mMap.addMarker(new MarkerOptions().position(latlng).title(placeName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
+                    count++;
+
+
+                }
+
+            }
+
+            if (count == 2) {
+                Toast.makeText(getApplicationContext(), "Secure", Toast.LENGTH_LONG).show();
+            } else if (count == 1) {
+                Toast.makeText(getApplicationContext(), "Moderate safety", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(), "NotSecure", Toast.LENGTH_LONG).show();
             }
