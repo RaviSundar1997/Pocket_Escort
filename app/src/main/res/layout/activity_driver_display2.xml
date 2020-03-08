@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
+        <TextView
             android:id="@+id/place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
 
         <Button
             android:id="@+id/search"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onSearch"
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
+        <TextView
             android:id="@+id/destinationplace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
 
         <Button
             android:id="@+id/search1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onSearch"
@@ -66,19 +66,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+        <TextView
+            android:id="@+id/places"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-        tools:context=".main_Display" />
+            android:layout_weight="1"
+            android:text="Route score here"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <Button
             android:id="@+id/route"
@@ -89,34 +88,21 @@
             android:textAlignment="center"
             android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/place_check"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Place"
-            android:textAlignment="center"
-            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/trackMe"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="For chicago"
-            android:textAlignment="center"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/panic_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="panic button"
-            android:textAlignment="center"
-            android:textSize="14sp" />
     </LinearLayout>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".main_Display" />
 
     </LinearLayout>
 </LinearLayout>

@@ -14,10 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Driver_display1"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Driver_display1" />
         <activity android:name=".Checker" />
         <activity android:name=".Place_Check" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".DriverDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

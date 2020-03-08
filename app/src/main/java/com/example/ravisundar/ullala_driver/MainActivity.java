@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
                else if(number.getText().toString().matches("7904934446")){
                     Toast.makeText(getApplicationContext(), "correct", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), Driver_display1.class);
-                    i.putExtra("number", String.valueOf(number));
+                    Intent i = new Intent(getApplicationContext(), DriverDisplay.class);
+                    //   i.putExtra("number", String.valueOf(number));
                     startActivity(i);
                 }
                 else {

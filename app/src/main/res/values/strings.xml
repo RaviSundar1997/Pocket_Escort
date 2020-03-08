@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">Ullala_Driver</string>
+    <string name="app_name">Pocket_Escort</string>
     <string name="title_activity_driver_display">Map</string>
     <string name="google_place_api">AIzaSyAjmM5aNkg_y-JNHjr9UIAfw-Y6a_mKo5M</string>
     <string name="number_empty">empty</string>
+    <string name="chk_movement">peoplemovement</string>
+    <string name="chk_secured">secured</string>
+    <string name="btn_highway">highway</string>
 </resources>
