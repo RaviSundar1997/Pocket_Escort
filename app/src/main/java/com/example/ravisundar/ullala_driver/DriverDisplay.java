@@ -318,7 +318,7 @@ public class DriverDisplay extends FragmentActivity implements OnMapReadyCallbac
             score += val;
             count++;
 
-            if (val > 0.2 && val < 0.4) {
+            if (val < 0.4) {
                 for (int i = 0; i < directionsList.length; i++) {
                     PolylineOptions options = new PolylineOptions();
                     options.color(Color.RED);
@@ -327,10 +327,10 @@ public class DriverDisplay extends FragmentActivity implements OnMapReadyCallbac
                     mMap.addPolyline(options);
                 }
 
-            } else if (val >= 0.4 && val <= 0.8) {
+            } else if (val >= 0.4 && val <= 0.6) {
                 for (int i = 0; i < directionsList.length; i++) {
                     PolylineOptions options = new PolylineOptions();
-                    options.color(Color.GREEN);
+                    options.color(Color.BLUE);
                     options.width(10);
                     options.addAll(PolyUtil.decode(directionsList[i]));
                     mMap.addPolyline(options);
@@ -339,7 +339,7 @@ public class DriverDisplay extends FragmentActivity implements OnMapReadyCallbac
             } else {
                 for (int i = 0; i < directionsList.length; i++) {
                     PolylineOptions options = new PolylineOptions();
-                    options.color(Color.BLACK);
+                    options.color(Color.GREEN);
                     options.width(10);
                     options.addAll(PolyUtil.decode(directionsList[i]));
                     mMap.addPolyline(options);
